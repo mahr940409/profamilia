@@ -1,6 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 export const adminStatus=createServerFn({method:'GET'}).handler(async()=>{
+ if(!process.env['SESSION_SECRET'])return {unlocked:false}
  const {adminSession}=await import('./admin-session.server')
  const session=await adminSession();return {unlocked:session.data.unlocked===true}
 })
