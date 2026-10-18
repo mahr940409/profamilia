@@ -1,0 +1,5 @@
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import type { Catalog } from '@/lib/incident-data'
+export function CatalogSelect({id,value,onChange,items,placeholder,all=false,disabled=false}:{id:string;value:string;onChange:(v:string)=>void;items:Catalog[];placeholder:string;all?:boolean;disabled?:boolean}) {
+ return <Select value={value || (all?'all':'')} onValueChange={v=>onChange(v==='all'?'':v)} disabled={disabled}><SelectTrigger id={id} aria-label={placeholder} className="catalog-select"><SelectValue placeholder={placeholder}/></SelectTrigger><SelectContent>{all && <SelectItem value="all">{placeholder}</SelectItem>}{items.map(item=><SelectItem key={item.id} value={item.id}>{item.name}{item.active===false?' (inactivo)':''}</SelectItem>)}</SelectContent></Select>
+}
