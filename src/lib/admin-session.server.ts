@@ -6,7 +6,7 @@ export async function adminSession() {
  if(!password)throw new Error('El acceso de administrador no está configurado.')
  setResponseHeader('cache-control','no-store')
  const production=process.env['NODE_ENV']==='production'
- return useSession<{unlocked?:boolean}>({password,name:'profamilia-admin',maxAge:60*60*8,cookie:{httpOnly:true,secure:production,sameSite:production?'none':'lax',path:'/'}})
+ return useSession<{unlocked?:boolean}>({password,name:'profamilia-admin',maxAge:60*30,cookie:{httpOnly:true,secure:production,sameSite:'lax',path:'/'}})
 }
 export function matchesPassword(input:string,expected:string){
  return timingSafeEqual(createHash('sha256').update(input).digest(),createHash('sha256').update(expected).digest())
