@@ -206,6 +206,14 @@ h1 { font-size: 36px; line-height: 1.2; font-weight: 600; letter-spacing: 0; }
 .catalog-row { display: flex; gap: 12px; align-items: center; border-bottom: 1px solid var(--border); padding: 16px 0; }
 .catalog-row span { flex: 1; font-size: 13px; }
 .catalog-state { font-size: 10px; color: var(--muted-foreground); }
+.catalog-state.is-active { color: #067647; }
+.catalog-state.is-inactive { color: #b42318; }
+.status-toggle { display: inline-flex; align-items: center; gap: 7px; min-width: 88px; justify-content: center; border: 1px solid var(--border); border-radius: 999px; padding: 7px 11px; background: var(--card); color: var(--foreground); cursor: pointer; font: inherit; font-size: 12px; font-weight: 600; transition: background .15s, border-color .15s, color .15s; }
+.status-toggle:hover:not(:disabled) { background: var(--muted); }
+.status-toggle:disabled { cursor: not-allowed; opacity: .55; }
+.status-toggle.is-active { border-color: #a6d9bf; background: #ecfdf3; color: #067647; }
+.status-toggle.is-inactive { border-color: #f0b7b2; background: #fff5f4; color: #b42318; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 .catalog-add { display: flex; gap: 10px; margin: 20px 0; }
 @media(max-width: 760px) { .app-header { height: 77px; } .header-inner { padding: 0 20px; } .brand-name { font-size: 23px; } .brand-name span { font-size: 8px; } .brand-mark { width: 30px; height: 30px; } .admin-access { padding: 0 11px; } .admin-access span { display: none; } .admin-access svg:last-child { display: none; } .public-main { padding: 30px 20px; } .breadcrumb { margin-bottom: 25px; } h1 { font-size: 29px; } .public-heading p { line-height: 1.7; } .public-grid { grid-template-columns: 1fr; gap: 30px; } .form-title { padding: 23px; } .form-fields { padding: 26px 23px; } .public-aside { display: none; } .office-band { margin-top: 28px; height: 115px; } .app-footer { margin: 0 20px; padding-top: 20px; flex-direction: column; } .admin-main { padding: 25px 20px; } .filters,.compare-filters,.metrics,.chart-grid { grid-template-columns: 1fr 1fr; } .chart-grid { grid-template-columns: 1fr; } .admin-title h1 { font-size: 25px; } .catalog-row { flex-wrap: wrap; } }
 @media(prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

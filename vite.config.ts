@@ -6,5 +6,5 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import netlify from "@netlify/vite-plugin-tanstack-start";
 
 export default defineConfig({
-  plugins: [tanstackStart(), netlify(), tsconfigPaths(), react(), tailwindcss()],
+  plugins: [tanstackStart(), ...(process.env.NETLIFY === "true" ? [netlify()] : []), tsconfigPaths(), react(), tailwindcss()],
 });
