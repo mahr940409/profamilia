@@ -1,0 +1,4 @@
+- Public incident submission uses an anonymous server function and a narrowly granted database RPC that validates active catalogs; timestamp validation lives in a database trigger and anonymous table access exposes only active names and identifiers.
+- Private reads and catalog writes require an encrypted shared-password session verified in every server handler before loading the privileged database client; browser clients never receive elevated database permissions.
+- Statistics and exports share pure filtering and aggregation helpers; exports reauthorize and fetch every matching record to avoid pagination discrepancies.
+- Authenticated content lives under the pathless _authenticated layout; the public index remains the incident form.

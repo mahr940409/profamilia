@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792118449866,
+      "tag": "0000_incident_reporting",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792118735906,
+      "tag": "0001_restrict_trigger_execution",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792118800276,
+      "tag": "0002_narrow_anonymous_privileges",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792464000000,
+      "tag": "0003_seed_billing_incident_types",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792550400000,
+      "tag": "0004_seed_employee_catalog",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792636800000,
+      "tag": "0005_reporter_auth",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792723200000,
+      "tag": "0006_close_anonymous_incident_writes",
+      "breakpoints": true
+    }
+  ]
+}
