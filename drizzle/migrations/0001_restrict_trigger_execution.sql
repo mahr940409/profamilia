@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.validate_incident() FROM PUBLIC, anon, authenticated;
