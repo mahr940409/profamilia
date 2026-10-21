@@ -16,6 +16,17 @@ export function summarize(rows: Incident[], start: string, end: string) {
   for (const r of rows) { const e = r.employees?.name ?? 'Empleado', t = r.incident_types?.name ?? 'Incidente'; employees.set(e, (employees.get(e) ?? 0) + 1); types.set(t, (types.get(t) ?? 0) + 1) }
   return { total: rows.length, daily: rows.length / Math.max(1, daysInPeriod(start, end)), employees: [...employees].map(([name, count]) => ({ name, count })).sort((a,b) => b.count-a.count), types: [...types].map(([name,count]) => ({ name,count,percent: rows.length ? count / rows.length * 100 : 0 })).sort((a,b) => b.count-a.count) }
 }
+export function breakdownByEmployeeType(rows: Incident[]) {
+  const grouped = new Map<string, Map<string, number>>()
+  for (const r of rows) {
+    const employee = r.employees?.name ?? 'Empleado'
+    const type = r.incident_types?.name ?? 'Incidente'
+    const types = grouped.get(employee) ?? new Map<string, number>()
+    types.set(type, (types.get(type) ?? 0) + 1)
+    grouped.set(employee, types)
+  }
+  return [...grouped].map(([employee, types]) => ({ employee, total: [...types.values()].reduce((sum, count) => sum + count, 0), types: [...types].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count) })).sort((a, b) => b.total - a.total)
+}
 export function variation(first: number, second: number) { return first === 0 ? null : (second-first)/first*100 }
 export function evolution(rows: Incident[], start: string, end: string, group: 'day'|'week'|'month') {
   const buckets = new Map<string, number>()

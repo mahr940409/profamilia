@@ -32,6 +32,7 @@ import {
   summarize,
   variation,
   evolution,
+  breakdownByEmployeeType,
   todayBogota,
   catalogSchema,
   type Catalog,
@@ -75,7 +76,8 @@ export function AdminPanel({ data }: { data: Data }) {
     monthlyDelta = variation(previousMonthSummary.daily, currentMonthSummary.daily),
     other = summarize(comparison, second.start, second.end),
     delta = variation(summary.total, other.total),
-    series = evolution(rows, f.start, f.end, group);
+    series = evolution(rows, f.start, f.end, group),
+    employeeTypeBreakdown = breakdownByEmployeeType(rows);
   const update = (key: keyof Filters, value: string) => {
     setF({ ...f, [key]: value });
     setPage(0);
@@ -351,6 +353,13 @@ export function AdminPanel({ data }: { data: Data }) {
                       <SummaryTable rows={summary.types} percent />
                     </section>
                   </div>
+                  <section className="breakdown-section">
+                    <div className="section-heading">
+                      <h2>Detalle por empleado y tipo de incidente</h2>
+                      <span className="text-sm text-muted-foreground">Qué incidentes componen el total de cada empleado</span>
+                    </div>
+                    <EmployeeTypeBreakdownTable rows={employeeTypeBreakdown} />
+                  </section>
                 </>
               )}
               {tab === "compare" && (
@@ -499,6 +508,16 @@ function SummaryTable({
       {!rows.length && <Empty />}
     </div>
   );
+}
+function EmployeeTypeBreakdownTable({ rows }: { rows: ReturnType<typeof breakdownByEmployeeType> }) {
+  return <div className="employee-breakdown-list">
+    {rows.map((row) => <article className="employee-breakdown-card" key={row.employee}>
+      <div className="employee-breakdown-person"><strong>{row.employee}</strong><span>Incidentes registrados</span></div>
+      <div className="employee-breakdown-total"><strong>{row.total}</strong><span>Total</span></div>
+      <div className="employee-breakdown-types">{row.types.map((type) => <div className="breakdown-type" key={type.name}><span>{type.name}</span><strong>{type.count}</strong></div>)}</div>
+    </article>)}
+    {!rows.length && <Empty />}
+  </div>;
 }
 function CatalogEditor({
   kind,

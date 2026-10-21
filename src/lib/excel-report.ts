@@ -19,7 +19,7 @@ function barChart(title:string,values:Point[],color='#00704F'){
  return c.toDataURL('image/png')
 }
 
-export async function excelReport(report:Report,{summary,other,delta,metadata,details}:{summary:Sum;other:Sum;delta:number|null;metadata:(string|number)[][];details:Record<string,string>[]}){
+ export async function excelReport(report:Report,{summary,other,delta,metadata,details,breakdown}:{summary:Sum;other:Sum;delta:number|null;metadata:(string|number)[][];details:Record<string,string>[];breakdown:{employee:string;total:number;types:{name:string;count:number}[]}[]}){
  const ExcelJS=(await import('exceljs')).default,wb=new ExcelJS.Workbook();wb.creator='Incidentes Profamilia'
  const side={style:'thin' as const,color:{argb:GREY}},border={top:side,bottom:side,left:side,right:side}
  const header=(row:Row)=>row.eachCell(c=>{c.font={bold:true,color:{argb:'FFFFFFFF'},name:'Arial'};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:GREEN}};c.border=border})
@@ -42,6 +42,8 @@ export async function excelReport(report:Report,{summary,other,delta,metadata,de
 
  const ds=wb.addWorksheet('Registros',{views:[{state:'frozen',ySplit:3,showGridLines:false}]});ds.columns=[{width:14},{width:16},{width:10},{width:30},{width:50}];title(ds,'Incidentes Profamilia · Registros',5)
  table(ds,3,['Período','Fecha','Hora','Empleado','Incidente'],details.map(d=>Object.values(d)));ds.autoFilter={from:'A3',to:'E3'}
+ const bs=wb.addWorksheet('Detalle por empleado',{views:[{showGridLines:false}]});bs.columns=[{width:30},{width:12},{width:80}];title(bs,'Incidentes Profamilia · Detalle por empleado',3)
+ table(bs,3,['Empleado','Total','Detalle por tipo'],breakdown.map(r=>[r.employee,r.total,r.types.map(t=>`${t.name}: ${t.count}`).join(' · ')]))
 
  const buf=await wb.xlsx.writeBuffer(),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download='incidentes-profamilia.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
 }

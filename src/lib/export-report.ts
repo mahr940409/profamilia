@@ -2,6 +2,7 @@ import {
   displayDate,
   displayTime,
   summarize,
+  breakdownByEmployeeType,
   variation,
   type Incident,
   type Filters,
@@ -22,6 +23,7 @@ export async function exportReport(format: "excel" | "pdf", report: Report) {
   const summary = summarize(rows, filters.start, filters.end),
     other = summarize(comparison, second.start, second.end);
   const delta = variation(summary.total, other.total);
+  const breakdown = breakdownByEmployeeType(rows);
   const filtersText = `Empleado: ${report.employees.find((e) => e.id === filters.employee)?.name ?? "Todos"} · Incidente: ${report.types.find((t) => t.id === filters.type)?.name ?? "Todos"}`;
   const metadata = [
     ["Período inicial", `${filters.start} a ${filters.end}`],
@@ -56,7 +58,7 @@ export async function exportReport(format: "excel" | "pdf", report: Report) {
   ];
   if (format === "excel") {
     const { excelReport } = await import("./excel-report");
-    await excelReport(report, { summary, other, delta, metadata, details });
+    await excelReport(report, { summary, other, delta, metadata, details, breakdown });
     return;
   }
   const { jsPDF } = await import("jspdf");
@@ -98,6 +100,13 @@ export async function exportReport(format: "excel" | "pdf", report: Report) {
     head: [["Tipo de incidente", "Cantidad", "Porcentaje"]],
     body: summary.types.map((t) => [t.name, t.count, t.percent.toFixed(1) + "%"]),
     styles: { fontSize: 9 },
+  });
+  y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
+  autoTable(doc, {
+    startY: y,
+    head: [["Empleado", "Total", "Detalle por tipo"]],
+    body: breakdown.map((r) => [r.employee, r.total, r.types.map((t) => `${t.name}: ${t.count}`).join(" · ")]),
+    styles: { fontSize: 8 },
   });
   if (comparing) {
     doc.addPage();
